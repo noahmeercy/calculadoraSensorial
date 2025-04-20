@@ -1,0 +1,2 @@
+# calculadoraSensorial
+Calculadora Sensorial
