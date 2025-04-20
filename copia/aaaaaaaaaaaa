@@ -1,0 +1,393 @@
+const frm = document.querySelector("form");
+const respAudi = document.querySelector("#respAudi");
+const respVis = document.querySelector("#respVis");
+const respTato = document.querySelector("#respTato");
+const respMovi = document.querySelector("#respMovi");
+const respPosi = document.querySelector("#respPosi");
+const respOral = document.querySelector("#respOral");
+const respConduta = document.querySelector("#respConduta");
+const respSocio = document.querySelector("#respSocio");
+const respAtencao = document.querySelector("#respAtencao");
+
+//obtém o contexto do canvas fora do evento de submit
+const ctx = document.getElementById("grafico1");
+let myGrafico; //variável para armanezar a instância do gráfico
+
+//Função para criar ou atualizar o gráfico
+function atualizarGrafico(
+  auditivo,
+  visual,
+  tato,
+  movimento,
+  posicao,
+  oral,
+  conduta,
+  socio,
+  atencao
+) {
+  // Cria um array com os valores dos dados
+  const dataValues = [
+    auditivo,
+    visual,
+    tato,
+    movimento,
+    posicao,
+    oral,
+    conduta,
+    socio,
+    atencao,
+  ];
+
+  // Array para armazenar as cores de fundo
+  const backgroundColors = [];
+
+  function getColor(value, categoria) {
+    let color = "rgba(75, 192, 192, 0.8)"; // Cor padrão
+
+    // Verifica a categoria e atribui a cor correspondente
+    if (categoria === "auditivo") {
+      if (value <= 2) color = "rgba(255, 251, 0, 0.8)"; // Amarelo
+      else if (value <= 9) color = "rgba(255, 165, 0, 0.8)"; // Laranja
+      else if (value <= 24) color = "rgba(0, 128, 0, 0.8)"; // Verde
+      else if (value <= 31) color = "rgba(255, 0, 0, 0.8)"; // Vermelho claro
+      else if (value <= 40) color = "rgba(139, 0, 0, 0.8)"; // Vermelho escuro
+    }
+
+    // Verifica a categoria e atribui a cor correspondente
+    if (categoria === "visual") {
+      if (value <= 4) color = "rgba(255, 251, 0, 0.8)"; // Amarelo
+      else if (value <= 8) color = "rgba(255, 165, 0, 0.8)"; // Laranja
+      else if (value <= 17) color = "rgba(0, 128, 0, 0.8)"; // Verde
+      else if (value <= 21) color = "rgba(255, 0, 0, 0.8)"; // Vermelho claro
+      else if (value <= 30) color = "rgba(139, 0, 0, 0.8)"; // Vermelho escuro
+    }
+
+    // Verifica a categoria e atribui a cor correspondente
+    if (categoria === "tato") {
+      if (value === 0) color = "rgba(255, 251, 0, 0.8)"; // Amarelo
+      else if (value <= 7) color = "rgba(255, 165, 0, 0.8)"; // Laranja
+      else if (value <= 21) color = "rgba(0, 128, 0, 0.8)"; // Verde
+      else if (value <= 28) color = "rgba(255, 0, 0, 0.8)"; // Vermelho claro
+      else if (value <= 55) color = "rgba(139, 0, 0, 0.8)"; // Vermelho escuro
+    }
+
+    // Verifica a categoria e atribui a cor correspondente
+    if (categoria === "movimento") {
+      if (value <= 1) color = "rgba(255, 251, 0, 0.8)"; // Amarelo
+      else if (value <= 6) color = "rgba(255, 165, 0, 0.8)"; // Laranja
+      else if (value <= 18) color = "rgba(0, 128, 0, 0.8)"; // Verde
+      else if (value <= 24) color = "rgba(255, 0, 0, 0.8)"; // Vermelho claro
+      else if (value <= 40) color = "rgba(139, 0, 0, 0.8)"; // Vermelho escuro
+    }
+
+    // Verifica a categoria e atribui a cor correspondente
+    if (categoria === "posicao") {
+      if (value === 0) color = "rgba(255, 251, 0, 0.8)"; // Amarelo
+      else if (value <= 4) color = "rgba(255, 165, 0, 0.8)"; // Laranja
+      else if (value <= 15) color = "rgba(0, 128, 0, 0.8)"; // Verde
+      else if (value <= 19) color = "rgba(255, 0, 0, 0.8)"; // Vermelho claro
+      else if (value <= 40) color = "rgba(139, 0, 0, 0.8)"; // Vermelho escuro
+    }
+
+    // Verifica a categoria e atribui a cor correspondente
+    if (categoria === "oral") {
+      if (value <= 7) color = "rgba(255, 165, 0, 0.8)"; // Laranja
+      else if (value <= 24) color = "rgba(0, 128, 0, 0.8)"; // Verde
+      else if (value <= 32) color = "rgba(255, 0, 0, 0.8)"; // Vermelho claro
+      else if (value <= 50) color = "rgba(139, 0, 0, 0.8)"; // Vermelho escuro
+    }
+
+    // Verifica a categoria e atribui a cor correspondente
+    if (categoria === "conduta") {
+      if (value <= 1) color = "rgba(255, 251, 0, 0.8)"; // Amarelo
+      else if (value <= 8) color = "rgba(255, 165, 0, 0.8)"; // Laranja
+      else if (value <= 22) color = "rgba(0, 128, 0, 0.8)"; // Verde
+      else if (value <= 29) color = "rgba(255, 0, 0, 0.8)"; // Vermelho claro
+      else if (value <= 45) color = "rgba(139, 0, 0, 0.8)"; // Vermelho escuro
+    }
+
+    // Verifica a categoria e atribui a cor correspondente
+    if (categoria === "socio") {
+      if (value <= 2) color = "rgba(255, 251, 0, 0.8)"; // Amarelo
+      else if (value <= 12) color = "rgba(255, 165, 0, 0.8)"; // Laranja
+      else if (value <= 31) color = "rgba(0, 128, 0, 0.8)"; // Verde
+      else if (value <= 41) color = "rgba(255, 0, 0, 0.8)"; // Vermelho claro
+      else if (value <= 70) color = "rgba(139, 0, 0, 0.8)"; // Vermelho escuro
+    }
+
+    // Verifica a categoria e atribui a cor correspondente
+    if (categoria === "atencao") {
+      if (value === 0) color = "rgba(255, 251, 0, 0.8)"; // Amarelo
+      else if (value <= 8) color = "rgba(255, 165, 0, 0.8)"; // Laranja
+      else if (value <= 24) color = "rgba(0, 128, 0, 0.8)"; // Verde
+      else if (value <= 31) color = "rgba(255, 0, 0, 0.8)"; // Vermelho claro
+      else if (value <= 50) color = "rgba(139, 0, 0, 0.8)"; // Vermelho escuro
+    }
+
+    return color;
+  }
+
+  // Adiciona as cores ao array de cores de fundo
+  backgroundColors.push(getColor(auditivo, "auditivo"));
+  backgroundColors.push(getColor(visual, "visual"));
+  backgroundColors.push(getColor(tato, "tato"));
+  backgroundColors.push(getColor(movimento, "movimento"));
+  backgroundColors.push(getColor(posicao, "posicao"));
+  backgroundColors.push(getColor(oral, "oral"));
+  backgroundColors.push(getColor(conduta, "conduta"));
+  backgroundColors.push(getColor(socio, "socio"));
+  backgroundColors.push(getColor(atencao, "atencao"));
+
+  if (myGrafico) {
+    // Se o gráfico já existir, atualiza os dados
+    myGrafico.data.datasets[0].data = dataValues;
+    myGrafico.data.datasets[0].backgroundColor = backgroundColors;
+    myGrafico.update(); // Atualiza o gráfico
+  } else {
+    //Se o grafico não existir, cria um novo
+    myGrafico = new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: [
+          "Auditivo",
+          "Visual",
+          "Tato",
+          "Movimentos",
+          "Posição do Corpo",
+          "Oral",
+          "Conduta",
+          "Socioemocional",
+          "Atenção",
+        ],
+        datasets: [
+          {
+            label: "Perfil Sensorial",
+            data: dataValues,
+            backgroundColor: backgroundColors,
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            title: {
+              display: true,
+              text: "Pontuação",
+            },
+          },
+          x: {
+            title: {
+              display: false,
+              text: "Categoria Sensorial",
+            },
+          },
+        },
+        plugins: {
+          legend: {
+            display: false,
+          },
+          title: {
+            display: true,
+            text: "Perfil Sensorial",
+            font: {
+              size: 20,
+            },
+          },
+        },
+      },
+    });
+  }
+}
+
+// Inicializa o gráfico com valores padrão (zero) ao carregar a página
+atualizarGrafico(0, 0, 0, 0, 0, 0, 0, 0, 0);
+
+// Adiciona um evento de submit ao formulário
+frm.addEventListener("submit", (e) => {
+  const auditivo = parseInt(frm.inAuditivo.value);
+  const visual = parseInt(frm.inVisual.value);
+  const tato = parseInt(frm.inTato.value);
+  const movimento = parseInt(frm.inMovimento.value);
+  const posicao = parseInt(frm.inPosicao.value);
+  const oral = parseInt(frm.inOral.value);
+  const conduta = parseInt(frm.inConduta.value);
+  const socio = parseInt(frm.inSocio.value);
+  const atencao = parseInt(frm.inAtencao.value);
+
+  // verifica o auditivo
+  if (auditivo <= 2) {
+    respAudi.innerText =
+      "O paciente apresenta um quadro auditivo Muito menos que outros(as)";
+  } else if (auditivo <= 9) {
+    respAudi.innerText =
+      "O paciente apresenta um quadro auditivo Menos que outros(as)";
+  } else if (auditivo <= 24) {
+    respAudi.innerText =
+      "O paciente apresenta um quadro auditivo Exatamente como a maioria dos (as) outros(as)";
+  } else if (auditivo <= 31) {
+    respAudi.innerText =
+      "O paciente apresenta um quadro auditivo Mais que outros(as)";
+  } else if (auditivo <= 40) {
+    respAudi.innerText =
+      "O paciente apresenta um quadro auditivo Muito mais que outros(as)";
+  }
+
+  // verifica o visual
+  if (visual <= 4) {
+    respVis.innerText =
+      "O paciente apresenta um quadro visual Muito menos que outros(as)";
+  } else if (visual <= 8) {
+    respVis.innerText =
+      "O paciente apresenta um quadro visual Menos que outros(as)";
+  } else if (visual <= 17) {
+    respVis.innerText =
+      "O paciente apresenta um quadro visual Exatamente como a maioria dos (as) outros(as)";
+  } else if (visual <= 21) {
+    respVis.innerText =
+      "O paciente apresenta um quadro visual Mais que outros(as)";
+  } else if (visual <= 30) {
+    respVis.innerText =
+      "O paciente apresenta um quadro visual Muito mais que outros(as)";
+  }
+
+  // verifica o tato
+  if (tato === 0) {
+    respTato.innerText =
+      "O paciente apresenta um quadro tato Muito menos que outros(as)";
+  } else if (tato <= 7) {
+    respTato.innerText =
+      "O paciente apresenta um quadro tato Menos que outros(as)";
+  } else if (tato <= 21) {
+    respTato.innerText =
+      "O paciente apresenta um quadro tato Exatamente como a maioria dos (as) outros(as)";
+  } else if (tato <= 28) {
+    respTato.innerText =
+      "O paciente apresenta um quadro tato Mais que outros(as)";
+  } else if (tato <= 55) {
+    respTato.innerText =
+      "O paciente apresenta um quadro tato Muito mais que outros(as)";
+  }
+
+  // Verifica o movimento
+
+  if (movimento <= 1) {
+    respMovi.innerText =
+      "O paciente apresenta um quadro movimento Muito menos que outros(as)";
+  } else if (movimento <= 6) {
+    respMovi.innerText =
+      "O paciente apresenta um quadro movimento Menos que outros(as)";
+  } else if (movimento <= 18) {
+    respMovi.innerText =
+      "O paciente apresenta um quadro movimento Exatamente como a maioria dos (as) outros(as)";
+  } else if (movimento <= 24) {
+    respMovi.innerText =
+      "O paciente apresenta um quadro movimento Mais que outros(as)";
+  } else if (movimento <= 40) {
+    respMovi.innerText =
+      "O paciente apresenta um quadro movimento Muito mais que outros(as)";
+  }
+
+  // Verifica a posição
+
+  if (posicao === 0) {
+    respPosi.innerText =
+      "O paciente apresenta um quadro posição Muito menos que outros(as)";
+  } else if (posicao <= 4) {
+    respPosi.innerText =
+      "O paciente apresenta um quadro posição Menos que outros(as)";
+  } else if (posicao <= 15) {
+    respPosi.innerText =
+      "O paciente apresenta um quadro posição Exatamente como a maioria dos (as) outros(as)";
+  } else if (posicao <= 19) {
+    respPosi.innerText =
+      "O paciente apresenta um quadro posição Mais que outros(as)";
+  } else if (posicao <= 40) {
+    respPosi.innerText =
+      "O paciente apresenta um quadro posição Muito mais que outros(as)";
+  }
+
+  // verifica o oral
+  if (oral <= 7) {
+    respOral.innerText =
+      "O paciente apresenta um quadro oral Menos que outros(as)";
+  } else if (oral <= 24) {
+    respOral.innerText =
+      "O paciente apresenta um quadro oral Exatamente como a maioria dos (as) outros(as)";
+  } else if (oral <= 32) {
+    respOral.innerText =
+      "O paciente apresenta um quadro oral Mais que outros(as)";
+  } else if (oral <= 50) {
+    respOral.innerText =
+      "O paciente apresenta um quadro oral Muito mais que outros(as)";
+  }
+
+  // verifica a conduta
+  if (conduta <= 1) {
+    respConduta.innerText =
+      "O paciente apresenta um quadro conduta Muito menos que outros(as)";
+  } else if (conduta <= 8) {
+    respConduta.innerText =
+      "O paciente apresenta um quadro conduta Menos que outros(as)";
+  } else if (conduta <= 22) {
+    respConduta.innerText =
+      "O paciente apresenta um quadro conduta Exatamente como a maioria dos (as) outros(as)";
+  } else if (conduta <= 29) {
+    respConduta.innerText =
+      "O paciente apresenta um quadro conduta Mais que outros(as)";
+  } else if (conduta <= 45) {
+    respConduta.innerText =
+      "O paciente apresenta um quadro conduta Muito mais que outros(as)";
+  }
+
+  // verifica o social
+  if (socio <= 2) {
+    respSocio.innerText =
+      "O paciente apresenta um quadro socioemocional Muito menos que outros(as)";
+  } else if (socio <= 12) {
+    respSocio.innerText =
+      "O paciente apresenta um quadro socioemocional Menos que outros(as)";
+  } else if (socio <= 31) {
+    respSocio.innerText =
+      "O paciente apresenta um quadro socioemocional Exatamente como a maioria dos (as) outros(as)";
+  } else if (socio <= 41) {
+    respSocio.innerText =
+      "O paciente apresenta um quadro socioemocional Mais que outros(as)";
+  } else if (socio <= 70) {
+    respSocio.innerText =
+      "O paciente apresenta um quadro socioemocional Muito mais que outros(as)";
+  }
+
+  //Verifica a atenção
+  if (atencao === 0) {
+    respAtencao.innerText =
+      "O paciente apresenta um quadro atencao Muito menos que outros(as)";
+  } else if (atencao <= 8) {
+    respAtencao.innerText =
+      "O paciente apresenta um quadro atencao Menos que outros(as)";
+  } else if (atencao <= 24) {
+    respAtencao.innerText =
+      "O paciente apresenta um quadro atencao Exatamente como a maioria dos (as) outros(as)";
+  } else if (atencao <= 31) {
+    respAtencao.innerText =
+      "O paciente apresenta um quadro atencao Mais que outros(as)";
+  } else if (atencao <= 50) {
+    respAtencao.innerText =
+      "O paciente apresenta um quadro atencao Muito mais que outros(as)";
+  }
+
+  atualizarGrafico(
+    auditivo,
+    visual,
+    tato,
+    movimento,
+    posicao,
+    oral,
+    conduta,
+    socio,
+    atencao
+  );
+
+  e.preventDefault();
+});

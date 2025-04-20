@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <title>Perfil Sensorial</title>
+  </head>
+  <body>
+    <header>
+      <img src="images/ChatGPT Image 19 de abr. de 2025, 05_34_49.png" alt="Criança sorrindo" class="kid"/>
+      <img src="./images/green-leaves-logo.png" alt="Folha decorativa" class="folha"/>
+      <h1>Perfil Sensorial</h1>
+    </header>
+
+    <div class="container">
+          <!-- Formulário de Entrada -->
+      <div class="card">
+        <form>
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="nome">Auditivo</label>
+                    <input type="number" id="inAuditivo" min="0" max="40" step="0" required />
+            </div>
+                <div class="form-group">
+                    <label for="nome">Visual</label>
+                    <input type="number" id="inVisual" min="0" max="30" step="0" required />
+            </div>
+                <div class="form-group">
+                    <label for="nome">Tato</label>
+                    <input type="number" id="inTato" min="0" max="55" step="0" required />
+            </div>
+                <div class="form-group">
+                    <label for="nome">Movimentos</label>
+                    <input type="number" id="inMovimento" min="0" max="40" step="0" required />
+            </div>
+                <div class="form-group">
+                    <label for="nome">Posição do Corpo</label>
+                    <input type="number" id="inPosicao" min="0" max="40" step="0" required />
+            </div>
+                <div class="form-group">
+                    <label for="nome">Oral</label>
+                    <input type="number" id="inOral" min="0" max="50" step="0" required />
+            </div>
+                <div class="form-group">
+                    <label for="nome">Conduta</label>
+                    <input type="number" id="inConduta" min="0" max="45" step="0" required />
+            </div>
+                <div class="form-group">
+                    <label for="nome">Socioemocional</label>
+                    <input type="number" id="inSocio" min="0" max="70" step="0" required />
+                 </div>
+                <div class="form-group">
+                    <label for="nome">Atenção</label>
+                    <input type="number" id="inAtencao" min="0" max="50" step="0" required />
+                </div>
+                </div>
+                <button type="submit">Calcular</button>
+        </form>
+      </div>
+      <!-- Gráfico -->
+      <div class="card chart-wrapper">
+        <canvas id="grafico1"></canvas>
+      </div>
+    </div>   <!-- final do container -->
+    
+    <div class="results" id="results">
+
+         <h3 id="respAudi"></h3>
+         <h3 id="respVis"></h3>
+         <h3 id="respTato"></h3>
+         <h3 id="respMovi"></h3>
+         <h3 id="respPosi"></h3>
+         <h3 id="respOral"></h3>
+         <h3 id="respConduta"></h3>
+         <h3 id="respSocio"></h3>
+         <h3 id="respAtencao"></h3>
+      </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
